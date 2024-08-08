@@ -2,7 +2,7 @@ const express = require('express');
 const { readTalkerData } = require('./readJsonData');
 const talkerRouter = require('./talker.routes');
 const validateLogin = require('./Middlewares/validateLogin');
-const generateToken = require('./Middlewares/generateToken')
+const generateToken = require('./Middlewares/generateToken');
 
 const app = express();
 app.use(express.json());
