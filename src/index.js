@@ -1,8 +1,14 @@
 const express = require('express');
-const { readTalkerData } = require('./readJsonData');
+const { readTalkerData, writeTalkerData } = require('./readJsonData');
 const talkerRouter = require('./talker.routes');
 const validateLogin = require('./Middlewares/validateLogin');
 const generateToken = require('./Middlewares/generateToken');
+const auth = require('./Middlewares/auth');
+const validateTalkerNamePost = require('./Middlewares/validateTalkerNamePost');
+const validateTalkerAgePost = require('./Middlewares/validateTalkerAgePost');
+const validateTalkerWatchedAtPost = require('./Middlewares/validateTalkerWatchedAtPost');
+const validateTalkerRatePost = require('./Middlewares/validateTalkerRatePost');
+const validateTalkPost = require('./Middlewares/validateTalkPost');
 
 const app = express();
 app.use(express.json());
@@ -10,7 +16,6 @@ app.use(express.json());
 const HTTP_OK_STATUS = 200;
 const PORT = process.env.PORT || '3001';
 
-// não remova esse endpoint, é para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
@@ -34,6 +39,28 @@ app.post('/login', validateLogin, (req, res) => {
     res.status(500).json({ message: 'Erro ao processar a requisição' });
   }
 });
+
+app.post('/talker',
+  auth,
+  validateTalkPost,
+  validateTalkerNamePost,
+  validateTalkerAgePost,
+  validateTalkerWatchedAtPost,
+  validateTalkerRatePost,
+  async (req, res) => {
+    try {
+      const newTalker = req.body;
+      const talkers = await readTalkerData();
+      newTalker.id = talkers.length + 1;
+      talkers.push(newTalker);
+      
+      await writeTalkerData(talkers);
+
+      res.status(201).json(newTalker);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao adicionar um novo palestrante' });
+    }
+  });
 
 app.listen(PORT, () => {
   console.log('Online');
