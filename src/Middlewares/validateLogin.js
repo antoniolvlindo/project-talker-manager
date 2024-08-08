@@ -1,29 +1,30 @@
+const validateField = (field, message) => {
+  if (!field) {
+    return message;
+  }
+  return null;
+};
+
+const validateEmailFormat = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return 'O "email" deve ter o formato "email@email.com"';
+  }
+  return null;
+};
+
 module.exports = (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email) {
-    return res.status(400).json({
-      message: 'O campo "email" é obrigatório',
-    });
-  }
+  const errors = [
+    validateField(email, 'O campo "email" é obrigatório'),
+    validateEmailFormat(email),
+    validateField(password, 'O campo "password" é obrigatório'),
+    password && password.length < 6 ? 'O "password" deve ter pelo menos 6 caracteres' : null,
+  ].filter((error) => error);
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    return res.status(400).json({
-      message: 'O "email" deve ter o formato "email@email.com"',
-    });
-  }
-
-  if (!password) {
-    return res.status(400).json({
-      message: 'O campo "password" é obrigatório',
-    });
-  }
-
-  if (password.length < 6) {
-    return res.status(400).json({
-      message: 'O "password" deve ter pelo menos 6 caracteres',
-    });
+  if (errors.length) {
+    return res.status(400).json({ message: errors[0] });
   }
 
   next();
