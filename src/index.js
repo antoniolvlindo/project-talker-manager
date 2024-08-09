@@ -64,6 +64,64 @@ app.post('/talker',
     }
   });
 
+  app.put('/talker/:id',
+  auth,
+  validateTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate,
+  validateTalkerName,
+  validateTalkerAge,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const updatedTalker = req.body;
+      const talkers = await readTalkerData();
+      const talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+
+      if (talkerIndex === -1) {
+        return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+      }
+
+      updatedTalker.id = parseInt(id, 10);
+      talkers[talkerIndex] = updatedTalker;
+
+      await writeTalkerData(talkers);
+
+      res.status(200).json(updatedTalker);
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao editar a pessoa palestrante' });
+    }
+  });
+
+  app.put('/talker/:id',
+    auth,
+    validateTalk,
+    validateTalkerWatchedAt,
+    validateTalkerRate,
+    validateTalkerName,
+    validateTalkerAge,
+    async (req, res) => {
+      try {
+        const { id } = req.params;
+        const updatedTalker = req.body;
+        const talkers = await readTalkerData();
+        const talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  
+        if (talkerIndex === -1) {
+          return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+        }
+  
+        updatedTalker.id = parseInt(id, 10);
+        talkers[talkerIndex] = updatedTalker;
+  
+        await writeTalkerData(talkers);
+  
+        res.status(200).json(updatedTalker);
+      } catch (error) {
+        res.status(500).json({ message: 'Erro ao editar a pessoa palestrante' });
+      }
+    });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
