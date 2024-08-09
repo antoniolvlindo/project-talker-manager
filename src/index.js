@@ -3,12 +3,14 @@ const { readTalkerData, writeTalkerData } = require('./readJsonData');
 const talkerRouter = require('./talker.routes');
 const validateLogin = require('./Middlewares/validateLogin');
 const generateToken = require('./Middlewares/generateToken');
-const auth = require('./Middlewares/auth');
-const validateTalkerNamePost = require('./Middlewares/validateTalkerNamePost');
-const validateTalkerAgePost = require('./Middlewares/validateTalkerAgePost');
-const validateTalkerWatchedAtPost = require('./Middlewares/validateTalkerWatchedAtPost');
-const validateTalkerRatePost = require('./Middlewares/validateTalkerRatePost');
-const validateTalkPost = require('./Middlewares/validateTalkPost');
+const {
+  auth,
+  validateTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate,
+  validateTalkerName,
+  validateTalkerAge,
+} = require('./Middlewares/validationsPost');
 
 const app = express();
 app.use(express.json());
@@ -42,11 +44,11 @@ app.post('/login', validateLogin, (req, res) => {
 
 app.post('/talker',
   auth,
-  validateTalkPost,
-  validateTalkerNamePost,
-  validateTalkerAgePost,
-  validateTalkerWatchedAtPost,
-  validateTalkerRatePost,
+  validateTalk,
+  validateTalkerWatchedAt,
+  validateTalkerRate,
+  validateTalkerName,
+  validateTalkerAge, 
   async (req, res) => {
     try {
       const newTalker = req.body;
