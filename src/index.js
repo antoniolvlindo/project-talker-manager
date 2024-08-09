@@ -94,6 +94,25 @@ app.put('/talker/:id',
   validateTalkerAge,
   updateTalker);
 
+app.delete('/talker/:id', auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const talkers = await readTalkerData();
+    const talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+
+    if (talkerIndex === -1) {
+      return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+
+    talkers.splice(talkerIndex, 1);
+    await writeTalkerData(talkers);
+
+    res.status(204).end();
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao deletar a pessoa palestrante' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
