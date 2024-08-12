@@ -32,8 +32,7 @@ app.get('/talker/search', auth, async (req, res) => {
     }
 
     const filteredTalkers = talkers.filter((talker) =>
-      talker.name.toLowerCase().includes(q.toLowerCase())
-    );
+      talker.name.toLowerCase().includes(q.toLowerCase()));
 
     return res.status(200).json(filteredTalkers);
   } catch (error) {
