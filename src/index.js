@@ -22,6 +22,25 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker/search', auth, async (req, res) => {
+  try {
+    const { q } = req.query;
+    const talkers = await readTalkerData();
+
+    if (!q || q === undefined) {
+      return res.status(200).json(talkers);
+    }
+
+    const filteredTalkers = talkers.filter((talker) =>
+      talker.name.toLowerCase().includes(q.toLowerCase())
+    );
+
+    return res.status(200).json(filteredTalkers);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar palestrantes' });
+  }
+});
+
 app.get('/talker', async (req, res) => {
   try {
     const talkers = await readTalkerData();
