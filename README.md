@@ -1,10 +1,17 @@
-# :construction: README em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto.
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+# Projeto de Gerenciamento de Palestrantes
+
+Este é um projeto para gerenciar palestrantes, permitindo criar, editar, deletar e buscar palestrantes em uma base de dados. O projeto inclui uma API desenvolvida em Node.js e testes automatizados para garantir a qualidade do código.
+
+## Tecnologias Utilizadas
+
+- Node.js
+- Express
+- Docker
+- Jest
+- ESLint
+
+## Comandos para Iniciar o Projeto
+
+```npm install```
+```docker exec -it talker_manager bash```
+```npm start```
